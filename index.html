@@ -209,6 +209,7 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-
         <div style="margin-bottom:6px">
           <label>Child / Name</label>
           <input type="text" id="log-child" placeholder="e.g. Alex" autocomplete="off"/>
+          <div class="chip-row" id="child-chips"></div>
         </div>
         <div style="margin-bottom:6px">
           <label>Setting / Location</label>
@@ -376,7 +377,7 @@ const ANT_CHIPS = [
 ];
 const BEH_CHIPS = [
   'Hitting', 'Biting', 'Kicking', 'Throwing objects', 'Screaming',
-  'Head Banging', 'Elopement', 'Dropping to floor',
+  'Self-injurious behavior', 'Elopement', 'Dropping to floor',
   'Property destruction', 'Verbal refusal', 'Crying', 'Stimming'
 ];
 const CON_CHIPS = [
@@ -384,7 +385,7 @@ const CON_CHIPS = [
   'Item returned', 'Task removed', 'Escape given', 'Praise / reinforcement',
   'Time-out / calm-down', 'Adult attention given', 'Peer removed'
 ];
-const SETTING_CHIPS = ['Home', 'Nana/Papa\'s', 'School', 'Car', 'Store', 'Playground', 'Clinic'];
+const SETTING_CHIPS = ['Home', 'ABA session', 'School', 'Car', 'Store', 'Playground', 'Therapy center'];
 
 function buildChips(id, items, selClass) {
   const c = document.getElementById(id); if (!c) return; c.innerHTML = '';
@@ -401,6 +402,18 @@ function buildIntRow() {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'int-btn'; b.textContent = o.l;
     b.onclick = () => { selInt = i + 1; document.querySelectorAll('.int-btn').forEach((x, j) => { x.className = 'int-btn' + (j === i ? ' ' + o.cls : ''); }); };
     r.appendChild(b);
+  });
+}
+
+function buildChildChips() {
+  const c = document.getElementById('child-chips'); if (!c) return; c.innerHTML = '';
+  ['Owen'].forEach(name => {
+    const ch = document.createElement('button'); ch.type = 'button'; ch.className = 'chip'; ch.textContent = name;
+    ch.onclick = () => {
+      document.getElementById('log-child').value = name;
+      c.querySelectorAll('.chip').forEach(x => x.classList.remove('a-sel')); ch.classList.add('a-sel');
+    };
+    c.appendChild(ch);
   });
 }
 
@@ -651,6 +664,7 @@ if (prevChild) document.getElementById('log-child').value = prevChild;
 buildChips('ant-chips', ANT_CHIPS, 'a-sel');
 buildChips('beh-chips', BEH_CHIPS, 'b-sel');
 buildChips('con-chips', CON_CHIPS, 'c-sel');
+buildChildChips();
 buildSettingChips();
 buildIntRow();
 updateAll();
